@@ -1,11 +1,9 @@
+no 5
+
 <!DOCTYPE html>
 <html lang="ms" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-      <title>AimanErnaWeddings Upload</title>
-</head>
-<body>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Walimatulurus Aiman & Erna | 02.01.2027</title>
 
@@ -45,7 +43,7 @@
                     fontFamily: {
                         serif: ['Cormorant Garamond', 'Playfair Display', 'serif'],
                         sans: ['Plus Jakarta Sans', 'Montserrat', 'sans-serif'],
-                        script: ['Great Vibes', 'cursive']
+                        script: ['Parisienne', 'cursive']
                     }
                 }
             }
@@ -55,7 +53,7 @@
     <!-- Google Fonts & FontAwesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Parisienne&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- YouTube Iframe API -->
@@ -68,7 +66,7 @@
             color: #4A3535;
         }
         .font-script {
-            font-family: 'Great Vibes', cursive;
+            font-family: 'Parisienne', cursive;
         }
         .font-serif-cormorant {
             font-family: 'Cormorant Garamond', serif;
@@ -113,7 +111,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Custom Invitation Envelope Animation */
         .envelope-shadow {
             box-shadow: 0 20px 40px -15px rgba(216, 131, 115, 0.25);
         }
@@ -131,18 +128,15 @@
         </audio>
     </div>
 
+    <!-- Opening Overlay -->
     <div id="openingOverlay" class="fixed inset-0 z-50 bg-gradient-to-b from-blush-50 via-cream to-blush-100 flex flex-col items-center justify-center p-4 transition-all duration-700">
         <div class="max-w-md w-full bg-white/90 backdrop-blur-md rounded-3xl p-8 border border-gold-300 text-center shadow-2xl envelope-shadow relative overflow-hidden">
             <div class="absolute -top-12 -right-12 w-32 h-32 bg-blush-100 rounded-full blur-2xl pointer-events-none"></div>
             
-            <!-- SVG Monogram Logo -->
             <div class="w-32 h-32 mx-auto mb-6 relative flex items-center justify-center">
                 <svg viewBox="0 0 200 200" class="w-full h-full text-gold-500">
-                    <!-- Circle frame -->
                     <circle cx="100" cy="100" r="85" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-dasharray="280 40" />
-                    <!-- Floral branch arc -->
                     <path d="M 35 120 C 25 80, 50 40, 95 30" fill="none" stroke="#AA7C11" stroke-width="1.5" stroke-linecap="round" />
-                    <!-- Leaves -->
                     <path d="M 40 100 Q 30 95, 33 88 Q 42 92, 40 100 Z" fill="#D4AF37" />
                     <path d="M 48 82 Q 38 75, 43 68 Q 50 74, 48 82 Z" fill="#D4AF37" />
                     <path d="M 62 62 Q 52 53, 58 47 Q 65 53, 62 62 Z" fill="#D4AF37" />
@@ -154,7 +148,7 @@
             </div>
 
             <span class="block uppercase tracking-[0.25em] text-[11px] font-semibold text-dusty-400 mb-2">Jemputan Perkahwinan</span>
-            <h1 class="font-script text-7xl md:text-9xl text-rosewood mb-2">Aiman <span class="text-blush-400 font-serif font-light text-5xl md:text-7xl">&</span> Erna</h1>
+            <h1 class="font-script text-6xl text-rosewood mb-2">Aiman <span class="font-serif-cormorant text-blush-500 font-light">&</span> Erna</h1>
             <p class="font-serif-cormorant text-sm italic text-dusty-500 mb-6">Sabtu, 02 Januari 2027</p>
 
             <button onclick="openInvitation()" class="w-full bg-gradient-to-r from-blush-400 via-blush-500 to-dusty-500 hover:opacity-95 text-white font-semibold py-3.5 px-6 rounded-full shadow-lg transition duration-300 flex items-center justify-center gap-2 text-xs uppercase tracking-widest group">
@@ -163,22 +157,21 @@
         </div>
     </div>
 
+    <!-- Music Player Floating Widget -->
     <div class="fixed bottom-5 left-5 z-40 flex items-center gap-3 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-full border border-blush-300 shadow-xl text-rosewood">
         <button id="musicToggleBtn" onclick="toggleMusic()" class="w-10 h-10 rounded-full bg-blush-400 text-white border border-blush-300 flex items-center justify-center hover:bg-blush-500 transition focus:outline-none shadow-md">
             <i class="fa-solid fa-play text-xs ml-0.5" id="musicPlayIcon"></i>
         </button>
         <div class="hidden sm:block text-xs">
-            <p id="songTitle" class="font-bold text-rosewood line-clamp-1">Satu Shaf Di Belakangku (Chorus)</p>
+            <p id="songTitle" class="font-bold text-rosewood line-clamp-1">Satu Shaf Di Belakangku</p>
             <p class="text-[10px] text-dusty-500">Arvian Dwi • <span id="musicStatusText" class="text-blush-500 font-semibold">Tekan untuk mainkan</span></p>
         </div>
         <div id="soundWave" class="flex items-center gap-1 px-1 paused">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
         </div>
     </div>
 
+    <!-- Navigation Bar -->
     <nav class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-blush-200 shadow-sm">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
             <a href="#" class="flex items-center gap-2">
@@ -190,30 +183,24 @@
             
             <div class="hidden md:flex space-x-6 text-xs font-medium uppercase tracking-widest text-dusty-500">
                 <a href="#hero" class="hover:text-blush-500 transition">Utama</a>
-                <a href="#rsvp" class="hover:text-blush-500 transition">Titipan Doa & Ucapan</a>
-                <a href="#gallery" class="hover:text-blush-500 transition">Galeri Gambar</a>
+                <a href="#rsvp" class="hover:text-blush-500 transition">Ucapan</a>
+                <a href="#gallery" class="hover:text-blush-500 transition">Galeri</a>
             </div>
 
-            <div class="flex items-center gap-2">
-                <a href="#upload" class="bg-blush-400 hover:bg-blush-500 text-white font-semibold text-xs px-4 py-2 rounded-full shadow-md transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-camera"></i> <span class="hidden sm:inline">Muat Naik Gambar</span>
-                </a>
-            </div>
+            <a href="#upload" class="bg-blush-400 hover:bg-blush-500 text-white font-semibold text-xs px-4 py-2 rounded-full shadow-md transition flex items-center gap-1.5">
+                <i class="fa-solid fa-camera"></i> <span class="hidden sm:inline">Muat Naik</span>
+            </a>
         </div>
     </nav>
 
+    <!-- Hero Section -->
     <section id="hero" class="relative py-16 md:py-24 px-4 text-center overflow-hidden bg-gradient-to-b from-blush-50 via-cream to-cream z-10">
         <div class="max-w-3xl mx-auto relative z-10">
-            <!-- Custom Monogram SVG Frame -->
             <div class="mb-6 inline-block relative">
                 <div class="w-36 h-36 md:w-44 md:h-44 rounded-full border border-gold-300 p-2 flex items-center justify-center mx-auto bg-white/80 shadow-md relative">
                     <svg viewBox="0 0 200 200" class="w-full h-full text-gold-500 absolute inset-0 p-1">
                         <circle cx="100" cy="100" r="90" fill="none" stroke="#D4AF37" stroke-width="1" stroke-dasharray="8 4" />
                         <path d="M 25 125 C 15 75, 45 30, 100 20" fill="none" stroke="#AA7C11" stroke-width="1.5" stroke-linecap="round" />
-                        <path d="M 30 105 Q 20 100, 23 93 Q 32 97, 30 105 Z" fill="#D4AF37" />
-                        <path d="M 38 87 Q 28 80, 33 73 Q 40 79, 38 87 Z" fill="#D4AF37" />
-                        <path d="M 52 67 Q 42 58, 48 52 Q 55 58, 52 67 Z" fill="#D4AF37" />
-                        <path d="M 72 48 Q 64 37, 72 33 Q 76 41, 72 48 Z" fill="#D4AF37" />
                     </svg>
                     <div class="flex flex-col items-center justify-center z-10">
                         <span class="font-serif-cormorant text-5xl md:text-6xl font-semibold gold-gradient-text leading-none">A<span class="font-script text-3xl md:text-4xl text-blush-500">&</span>E</span>
@@ -223,7 +210,7 @@
             </div>
 
             <span class="block uppercase tracking-[0.3em] text-xs font-semibold text-dusty-400 mb-2">Walimatulurus</span>
-            <h1 class="font-script text-7xl md:text-9xl text-rosewood mb-2">Aiman <span class="text-blush-400 font-serif font-light text-5xl md:text-7xl">&</span> Erna</h1>
+            <h1 class="font-script text-7xl md:text-9xl text-rosewood mb-2">Aiman <span class="text-blush-400 font-serif-cormorant font-light text-5xl md:text-7xl">&</span> Erna</h1>
             <p class="font-serif-cormorant italic text-lg md:text-2xl text-dusty-500 mb-8">"Dan Kami menciptakan kamu berpasang-pasangan"<br><span class="text-xs font-sans not-italic text-dusty-400">(Surah An-Naba': 8)</span></p>
 
             <div class="inline-flex items-center gap-2 bg-white/90 border border-blush-200 px-6 py-2.5 rounded-full text-xs md:text-sm text-dusty-600 mb-10 shadow-sm">
@@ -256,7 +243,10 @@
                     </div>
                 </div>
             </div>
-          
+        </div>
+    </section>
+
+    <!-- RSVP & Wishes Section -->
     <section id="rsvp" class="py-12 px-4 max-w-4xl mx-auto w-full z-10 relative">
         <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-6 md:p-10 border border-blush-200 shadow-md">
             <div class="text-center mb-8">
@@ -264,16 +254,15 @@
                 <p class="text-dusty-400 text-xs md:text-sm mt-1">Sila lengkapkan butiran di bawah untuk ucapan dan doa.</p>
             </div>
 
-            <!-- Simplified Form (No Attendance Selector) -->
             <form id="rsvpWishForm" class="space-y-4 mb-8 bg-cream p-5 md:p-6 rounded-2xl border border-blush-200">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-dusty-500 mb-1">Nama Tetamu <span class="text-blush-500">*</span></label>
-                        <input type="text" id="rsvpName" required placeholder="Nama Anda / Keluarga" class="w-full px-4 py-2.5 rounded-xl bg-white border border-blush-200 text-rosewood placeholder-dusty-300 text-sm focus:ring-2 focus:ring-blush-300 outline-none">
+                        <input type="text" id="rsvpName" required placeholder="Nama Anda / Keluarga" class="w-full px-4 py-2.5 rounded-xl bg-white border border-blush-200 text-rosewood text-sm outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-dusty-500 mb-1">Bilangan Tetamu (Pax)</label>
-                        <select id="rsvpCount" class="w-full px-4 py-2.5 rounded-xl bg-white border border-blush-200 text-rosewood text-sm focus:ring-2 focus:ring-blush-300 outline-none">
+                        <select id="rsvpCount" class="w-full px-4 py-2.5 rounded-xl bg-white border border-blush-200 text-rosewood text-sm outline-none">
                             <option value="1 Orang">1 Orang</option>
                             <option value="2 Orang">2 Orang</option>
                             <option value="3-4 Orang">3-4 Orang</option>
@@ -284,7 +273,7 @@
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-dusty-500 mb-1">Doa / Ucapan Buat Pengantin <span class="text-blush-500">*</span></label>
-                    <textarea id="rsvpWishText" rows="3" required placeholder="Tuliskan ucapan atau doa ikhlas anda..." class="w-full px-4 py-2.5 rounded-xl bg-white border border-blush-200 text-rosewood placeholder-dusty-300 text-sm focus:ring-2 focus:ring-blush-300 outline-none resize-none"></textarea>
+                    <textarea id="rsvpWishText" rows="3" required placeholder="Tuliskan ucapan atau doa ikhlas anda..." class="w-full px-4 py-2.5 rounded-xl bg-white border border-blush-200 text-rosewood text-sm outline-none resize-none"></textarea>
                 </div>
 
                 <button type="submit" class="w-full bg-blush-400 hover:bg-blush-500 text-white font-bold py-3.5 px-6 rounded-xl transition shadow-sm flex items-center justify-center gap-2 text-xs uppercase tracking-wider">
@@ -299,6 +288,7 @@
         </div>
     </section>
 
+    <!-- Upload Section -->
     <section id="upload" class="py-12 px-4 max-w-4xl mx-auto w-full z-10 relative">
         <div class="bg-white/95 backdrop-blur-sm rounded-3xl p-6 md:p-10 shadow-md border border-blush-200">
             <div class="text-center mb-8">
@@ -317,7 +307,6 @@
                         </div>
                         <div>
                             <p class="font-medium text-rosewood text-sm">Tekan untuk ambil / pilih gambar atau <span class="text-blush-500 underline">tarik fail ke sini</span></p>
-                            <p class="text-[11px] text-dusty-400 mt-1">Format JPG, PNG, WEBP (Boleh muat naik beberapa gambar serentak)</p>
                         </div>
                     </div>
 
@@ -326,12 +315,12 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label for="guestName" class="block text-xs font-semibold uppercase tracking-wider text-dusty-500 mb-1">Nama Anda / Keluarga <span class="text-blush-500">*</span></label>
-                        <input type="text" id="guestName" required placeholder="Contoh: Sarah & Hafiz" class="w-full px-4 py-3 rounded-xl border border-blush-200 bg-cream text-rosewood placeholder-dusty-300 focus:outline-none focus:ring-2 focus:ring-blush-300 text-sm">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-dusty-500 mb-1">Nama Anda / Keluarga *</label>
+                        <input type="text" id="guestName" required placeholder="Contoh: Sarah & Hafiz" class="w-full px-4 py-3 rounded-xl border border-blush-200 bg-cream text-rosewood text-sm outline-none">
                     </div>
                     <div>
-                        <label for="guestCategory" class="block text-xs font-semibold uppercase tracking-wider text-dusty-500 mb-1">Kategori Gambar</label>
-                        <select id="guestCategory" class="w-full px-4 py-3 rounded-xl border border-blush-200 bg-cream text-rosewood focus:outline-none focus:ring-2 focus:ring-blush-300 text-sm">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-dusty-500 mb-1">Kategori Gambar</label>
+                        <select id="guestCategory" class="w-full px-4 py-3 rounded-xl border border-blush-200 bg-cream text-rosewood text-sm outline-none">
                             <option value="Majlis Nikah">Majlis Nikah</option>
                             <option value="Resepsi">Resepsi</option>
                             <option value="Bersama Pengantin">Bersama Pengantin</option>
@@ -341,8 +330,8 @@
                 </div>
 
                 <div>
-                    <label for="guestMessage" class="block text-xs font-semibold uppercase tracking-wider text-dusty-500 mb-1">Kapsyen Ringkas</label>
-                    <input type="text" id="guestMessage" placeholder="Contoh: Selamat Pengantin Baru Aiman & Erna!" class="w-full px-4 py-3 rounded-xl border border-blush-200 bg-cream text-rosewood placeholder-dusty-300 focus:outline-none focus:ring-2 focus:ring-blush-300 text-sm">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-dusty-500 mb-1">Kapsyen Ringkas</label>
+                    <input type="text" id="guestMessage" placeholder="Contoh: Selamat Pengantin Baru Aiman & Erna!" class="w-full px-4 py-3 rounded-xl border border-blush-200 bg-cream text-rosewood text-sm outline-none">
                 </div>
 
                 <button type="submit" id="submitBtn" class="w-full bg-blush-400 hover:bg-blush-500 text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition flex items-center justify-center gap-2 text-xs uppercase tracking-wider">
@@ -353,17 +342,15 @@
         </div>
     </section>
 
+    <!-- Gallery Section -->
     <section id="gallery" class="py-12 px-4 max-w-6xl mx-auto w-full z-10 relative">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-blush-200 pb-4">
             <div>
                 <span class="text-blush-400 font-semibold text-xs uppercase tracking-widest">Galeri Awam</span>
                 <h2 class="font-serif-cormorant text-3xl text-rosewood font-bold">Kenangan Indah Majlis</h2>
             </div>
-            
             <div class="mt-4 md:mt-0 flex items-center gap-3">
-                <span class="text-xs text-dusty-500">
-                    <span id="photoCount" class="font-bold text-blush-500">0</span> gambar dikongsi
-                </span>
+                <span class="text-xs text-dusty-500"><span id="photoCount" class="font-bold text-blush-500">0</span> gambar dikongsi</span>
             </div>
         </div>
 
@@ -376,7 +363,6 @@
             <button onclick="filterPhotos('Tetamu')" class="filter-btn bg-white text-dusty-500 border border-blush-200 hover:text-blush-500 px-4 py-2 rounded-full font-medium">Tetamu</button>
         </div>
 
-        <!-- Photo Grid -->
         <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
         <div id="emptyGallery" class="hidden text-center py-16 bg-white/95 rounded-2xl border border-dashed border-blush-200">
@@ -385,13 +371,11 @@
         </div>
     </section>
 
+    <!-- Lightbox Modal -->
     <div id="lightbox" class="fixed inset-0 z-50 bg-black/90 hidden flex flex-col items-center justify-center p-4">
-        <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white text-3xl hover:text-blush-300 p-2 z-10">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white text-3xl p-2 z-10"><i class="fa-solid fa-xmark"></i></button>
         <div class="max-w-4xl max-h-[85vh] w-full flex flex-col items-center justify-center">
-            <img id="lightboxImg" src="" alt="Full size photo" class="max-h-[70vh] max-w-full object-contain rounded-xl shadow-2xl border border-white/20">
+            <img id="lightboxImg" src="" class="max-h-[70vh] max-w-full object-contain rounded-xl shadow-2xl border border-white/20">
             <div id="lightboxCaption" class="text-center text-white mt-4 max-w-xl">
                 <span id="lightboxCategory" class="inline-block bg-blush-400 text-white text-[10px] uppercase font-bold px-3 py-0.5 rounded-full mb-1"></span>
                 <p id="lightboxName" class="font-bold text-base text-blush-200"></p>
@@ -408,11 +392,13 @@
         </div>
     </div>
 
+    <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-5 right-5 z-50 bg-white border border-blush-300 text-rosewood px-5 py-3.5 rounded-xl shadow-xl transition-all duration-300 transform translate-y-20 opacity-0 flex items-center gap-3">
         <i class="fa-solid fa-circle-check text-blush-400 text-lg"></i>
         <span id="toastMsg" class="text-xs font-medium">Berjaya!</span>
     </div>
 
+    <!-- Footer -->
     <footer class="bg-white/90 border-t border-blush-200 py-8 px-4 text-center text-dusty-400 text-xs mt-12 z-10 relative">
         <div class="max-w-xl mx-auto space-y-2">
             <div class="w-8 h-8 rounded-full border border-gold-400 flex items-center justify-center mx-auto bg-cream">
@@ -424,6 +410,7 @@
         </div>
     </footer>
 
+    <!-- Main Logic Script -->
     <script>
         /* --- Falling Rose Petals Canvas Animation --- */
         function initPetalAnimation() {
@@ -441,7 +428,6 @@
 
             const TOTAL_PETALS = 30;
             const petals = [];
-
             const colors = [
                 { fill: 'rgba(232, 165, 152, 0.75)', border: 'rgba(216, 131, 115, 0.85)' },
                 { fill: 'rgba(244, 194, 194, 0.8)',  border: 'rgba(232, 165, 152, 0.9)' },
@@ -450,10 +436,7 @@
             ];
 
             class Petal {
-                constructor() {
-                    this.reset(true);
-                }
-
+                constructor() { this.reset(true); }
                 reset(initial = false) {
                     this.x = Math.random() * width;
                     this.y = initial ? Math.random() * height : -20;
@@ -466,57 +449,42 @@
                     this.oscillationCount = Math.random() * 100;
                     this.color = colors[Math.floor(Math.random() * colors.length)];
                 }
-
                 update() {
                     this.oscillationCount += this.oscillation;
                     this.y += this.speedY;
                     this.x += Math.sin(this.oscillationCount) * 0.8 + this.speedX;
                     this.angle += this.spinSpeed;
-
-                    if (this.y > height + 30 || this.x < -30 || this.x > width + 30) {
-                        this.reset(false);
-                    }
+                    if (this.y > height + 30 || this.x < -30 || this.x > width + 30) this.reset(false);
                 }
-
                 draw() {
                     ctx.save();
                     ctx.translate(this.x, this.y);
                     ctx.rotate(this.angle);
-
                     ctx.beginPath();
                     ctx.moveTo(0, -this.size);
                     ctx.bezierCurveTo(this.size * 0.8, -this.size * 0.5, this.size, this.size * 0.6, 0, this.size);
                     ctx.bezierCurveTo(-this.size, this.size * 0.6, -this.size * 0.8, -this.size * 0.5, 0, -this.size);
                     ctx.closePath();
-
                     ctx.fillStyle = this.color.fill;
                     ctx.fill();
-
                     ctx.strokeStyle = this.color.border;
                     ctx.lineWidth = 0.5;
                     ctx.stroke();
-
                     ctx.restore();
                 }
             }
 
-            for (let i = 0; i < TOTAL_PETALS; i++) {
-                petals.push(new Petal());
-            }
+            for (let i = 0; i < TOTAL_PETALS; i++) petals.push(new Petal());
 
             function animatePetals() {
                 ctx.clearRect(0, 0, width, height);
-                petals.forEach(p => {
-                    p.update();
-                    p.draw();
-                });
+                petals.forEach(p => { p.update(); p.draw(); });
                 requestAnimationFrame(animatePetals);
             }
-
             animatePetals();
         }
 
-        /* --- Application Data & State --- */
+        /* --- App State & Data --- */
         let photos = [];
         let wishes = [];
         let currentFilter = 'Semua';
@@ -543,62 +511,26 @@
                 message: 'Tahniah bro Aiman & Erna! Pelamin tema soft pink & gold sangat cantik!',
                 likes: 24,
                 timestamp: '45 minit lalu'
-            },
-            {
-                id: 'ae-3',
-                url: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
-                name: 'Mak Su & Sepupu',
-                category: 'Resepsi',
-                message: 'Majlis amat teratur dan mesra. Selamat pengantin baru!',
-                likes: 12,
-                timestamp: '1 jam lalu'
             }
         ];
 
         const SAMPLE_WISHES = [
             { name: 'Dato\' Hj. Azman & Datin', count: '2 Orang', text: 'Barakallahulakuma wa baraka alaika wa jamaa bainakuma fii khair buat Aiman & Erna.' },
-            { name: 'Farah & Husband', count: '2 Orang', text: 'Tahniah Erna sayang! So happy for both of you! Pelamin tema soft pink ni mmg gorgeous sangat!' }
+            { name: 'Farah & Husband', count: '2 Orang', text: 'Tahniah Erna sayang! So happy for both of you!' }
         ];
 
-        /* YouTube Audio API Integration */
         function onYouTubeIframeAPIReady() {
             try {
                 ytPlayer = new YT.Player('ytAudioPlayer', {
-                    height: '0',
-                    width: '0',
-                    videoId: 'h1Hx7VmOaC0',
-                    playerVars: {
-                        'autoplay': 0,
-                        'controls': 0,
-                        'loop': 1,
-                        'playlist': 'h1Hx7VmOaC0'
-                    },
+                    height: '0', width: '0', videoId: 'h1Hx7VmOaC0',
+                    playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'h1Hx7VmOaC0' },
                     events: {
-                        'onReady': onPlayerReady,
-                        'onStateChange': onPlayerStateChange,
-                        'onError': onPlayerError
+                        'onReady': () => { ytPlayerReady = true; },
+                        'onStateChange': (e) => setMusicUIState(e.data === YT.PlayerState.PLAYING),
+                        'onError': () => { useBackupAudio = true; }
                     }
                 });
-            } catch (err) {
-                console.warn('YouTube API unavailable, fallback to backup audio', err);
-                useBackupAudio = true;
-            }
-        }
-
-        function onPlayerReady() {
-            ytPlayerReady = true;
-        }
-
-        function onPlayerError() {
-            useBackupAudio = true;
-        }
-
-        function onPlayerStateChange(event) {
-            if (event.data === YT.PlayerState.PLAYING) {
-                setMusicUIState(true);
-            } else {
-                setMusicUIState(false);
-            }
+            } catch (err) { useBackupAudio = true; }
         }
 
         function setMusicUIState(playing) {
@@ -635,83 +567,38 @@
         };
 
         function loadData() {
-            const storedPhotos = localStorage.getItem('ae_wedding_photos');
-            const storedWishes = localStorage.getItem('ae_wedding_wishes');
-
-            photos = storedPhotos ? JSON.parse(storedPhotos) : SAMPLE_PHOTOS;
-            wishes = storedWishes ? JSON.parse(storedWishes) : SAMPLE_WISHES;
-
-            if (!storedPhotos) savePhotos();
-            if (!storedWishes) saveWishes();
+            photos = JSON.parse(localStorage.getItem('ae_wedding_photos')) || SAMPLE_PHOTOS;
+            wishes = JSON.parse(localStorage.getItem('ae_wedding_wishes')) || SAMPLE_WISHES;
         }
 
-        function savePhotos() {
-            try {
-                localStorage.setItem('ae_wedding_photos', JSON.stringify(photos));
-            } catch(e) {
-                console.warn('Storage limit reached');
-            }
-        }
-
-        function saveWishes() {
-            localStorage.setItem('ae_wedding_wishes', JSON.stringify(wishes));
-        }
+        function savePhotos() { localStorage.setItem('ae_wedding_photos', JSON.stringify(photos)); }
+        function saveWishes() { localStorage.setItem('ae_wedding_wishes', JSON.stringify(wishes)); }
 
         function initCountdown() {
             const weddingDate = new Date('January 2, 2027 09:00:00').getTime();
-
-            function updateTimer() {
+            setInterval(() => {
                 const now = new Date().getTime();
                 const distance = weddingDate - now;
-
-                if (distance < 0) {
-                    document.getElementById('cd-days').innerText = '00';
-                    document.getElementById('cd-hours').innerText = '00';
-                    document.getElementById('cd-minutes').innerText = '00';
-                    document.getElementById('cd-seconds').innerText = '00';
-                    return;
-                }
-
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                document.getElementById('cd-days').innerText = days < 10 ? '0' + days : days;
-                document.getElementById('cd-hours').innerText = hours < 10 ? '0' + hours : hours;
-                document.getElementById('cd-minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
-                document.getElementById('cd-seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
-            }
-
-            updateTimer();
-            setInterval(updateTimer, 1000);
+                if (distance < 0) return;
+                document.getElementById('cd-days').innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+                document.getElementById('cd-hours').innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById('cd-minutes').innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById('cd-seconds').innerText = Math.floor((distance % (1000 * 60)) / 1000);
+            }, 1000);
         }
 
         function toggleMusic() {
             const backupAudio = document.getElementById('backupAudio');
-
             if (isMusicPlaying) {
-                if (useBackupAudio && backupAudio) {
-                    backupAudio.pause();
-                } else if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
-                    ytPlayer.pauseVideo();
-                }
+                if (useBackupAudio && backupAudio) backupAudio.pause();
+                else if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
                 setMusicUIState(false);
             } else {
                 if (useBackupAudio || !ytPlayerReady) {
-                    backupAudio.play().then(() => {
-                        setMusicUIState(true);
-                    }).catch(() => {
-                        showToast('Tekan sekali lagi untuk memainkan muzik.');
-                    });
-                } else if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
-                    try {
-                        ytPlayer.playVideo();
-                        setMusicUIState(true);
-                    } catch(e) {
-                        backupAudio.play();
-                        setMusicUIState(true);
-                    }
+                    backupAudio.play().then(() => setMusicUIState(true)).catch(() => showToast('Tekan sekali lagi untuk memainkan muzik.'));
+                } else if (ytPlayer && ytPlayer.playVideo) {
+                    try { ytPlayer.playVideo(); setMusicUIState(true); } 
+                    catch(e) { backupAudio.play(); setMusicUIState(true); }
                 }
             }
         }
@@ -719,55 +606,27 @@
         function setupEventListeners() {
             const dropZone = document.getElementById('dropZone');
             const fileInput = document.getElementById('fileInput');
-            const uploadForm = document.getElementById('uploadForm');
-            const rsvpWishForm = document.getElementById('rsvpWishForm');
-
             dropZone.addEventListener('click', () => fileInput.click());
-
-            dropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropZone.classList.add('border-blush-400', 'bg-blush-100/50');
-            });
-
-            dropZone.addEventListener('dragleave', () => {
-                dropZone.classList.remove('border-blush-400', 'bg-blush-100/50');
-            });
-
-            dropZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropZone.classList.remove('border-blush-400', 'bg-blush-100/50');
-                if (e.dataTransfer.files.length) {
-                    fileInput.files = e.dataTransfer.files;
-                    handleFileSelect();
-                }
-            });
-
             fileInput.addEventListener('change', handleFileSelect);
-            uploadForm.addEventListener('submit', handlePhotoSubmit);
-            rsvpWishForm.addEventListener('submit', handleRsvpSubmit);
+            document.getElementById('uploadForm').addEventListener('submit', handlePhotoSubmit);
+            document.getElementById('rsvpWishForm').addEventListener('submit', handleRsvpSubmit);
         }
 
         let selectedFilesData = [];
 
         function handleFileSelect() {
-            const fileInput = document.getElementById('fileInput');
-            const previewContainer = document.getElementById('previewContainer');
-            const uploadPrompt = document.getElementById('uploadPrompt');
-
-            const files = Array.from(fileInput.files);
+            const files = Array.from(document.getElementById('fileInput').files);
             if (files.length === 0) return;
-
+            const previewContainer = document.getElementById('previewContainer');
             previewContainer.innerHTML = '';
             previewContainer.classList.remove('hidden');
-            uploadPrompt.classList.add('hidden');
-
+            document.getElementById('uploadPrompt').classList.add('hidden');
             selectedFilesData = [];
 
             files.forEach(file => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     selectedFilesData.push(e.target.result);
-
                     const imgWrapper = document.createElement('div');
                     imgWrapper.className = 'relative aspect-square rounded-xl overflow-hidden border border-blush-200 shadow-sm';
                     imgWrapper.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
@@ -779,100 +638,66 @@
 
         function handlePhotoSubmit(e) {
             e.preventDefault();
-
-            const guestName = document.getElementById('guestName').value.trim();
-            const guestCategory = document.getElementById('guestCategory').value;
-            const guestMessage = document.getElementById('guestMessage').value.trim();
-
             if (selectedFilesData.length === 0) {
                 showToast('Sila pilih sekurang-kurangnya satu gambar!');
                 return;
             }
+            const guestName = document.getElementById('guestName').value.trim();
+            const guestCategory = document.getElementById('guestCategory').value;
+            const guestMessage = document.getElementById('guestMessage').value.trim();
 
             selectedFilesData.forEach(fileUrl => {
-                const newPhoto = {
+                photos.unshift({
                     id: 'ae-photo-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
-                    url: fileUrl,
-                    name: guestName,
-                    category: guestCategory,
+                    url: fileUrl, name: guestName, category: guestCategory,
                     message: guestMessage || 'Momen indah bersama Aiman & Erna!',
-                    likes: 0,
-                    timestamp: 'Baru sahaja'
-                };
-                photos.unshift(newPhoto);
+                    likes: 0, timestamp: 'Baru sahaja'
+                });
             });
 
             savePhotos();
             renderGallery();
-
             document.getElementById('uploadForm').reset();
-            document.getElementById('previewContainer').innerHTML = '';
             document.getElementById('previewContainer').classList.add('hidden');
             document.getElementById('uploadPrompt').classList.remove('hidden');
             selectedFilesData = [];
-
             showToast('Gambar berjaya dimuat naik!');
             document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
         }
 
         function handleRsvpSubmit(e) {
             e.preventDefault();
-
-            const nameEl = document.getElementById('rsvpName');
-            const countEl = document.getElementById('rsvpCount');
-            const textEl = document.getElementById('rsvpWishText');
-
-            const name = nameEl ? nameEl.value.trim() : '';
-            const countVal = countEl ? countEl.value : '1 Orang';
-            const text = textEl ? textEl.value.trim() : '';
-
-            const newWish = { name, count: countVal, text };
-            wishes.unshift(newWish);
-
+            wishes.unshift({
+                name: document.getElementById('rsvpName').value.trim(),
+                count: document.getElementById('rsvpCount').value,
+                text: document.getElementById('rsvpWishText').value.trim()
+            });
             saveWishes();
             renderWishes();
-
             document.getElementById('rsvpWishForm').reset();
             showToast('Terima kasih! Ucapan anda telah dihantar.');
         }
 
         function renderGallery() {
             const grid = document.getElementById('galleryGrid');
-            const countDisplay = document.getElementById('photoCount');
-            const emptyGallery = document.getElementById('emptyGallery');
-
-            let displayPhotos = [...photos];
-
-            if (currentFilter !== 'Semua') {
-                displayPhotos = displayPhotos.filter(p => p.category === currentFilter);
-            }
-
-            countDisplay.innerText = displayPhotos.length;
-
+            const displayPhotos = currentFilter === 'Semua' ? photos : photos.filter(p => p.category === currentFilter);
+            document.getElementById('photoCount').innerText = displayPhotos.length;
+            
             if (displayPhotos.length === 0) {
                 grid.innerHTML = '';
-                emptyGallery.classList.remove('hidden');
+                document.getElementById('emptyGallery').classList.remove('hidden');
                 return;
-            } else {
-                emptyGallery.classList.add('hidden');
             }
+            document.getElementById('emptyGallery').classList.add('hidden');
 
             grid.innerHTML = displayPhotos.map(photo => `
                 <div class="bg-white/95 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition duration-300 border border-blush-200 flex flex-col group">
                     <div class="relative overflow-hidden cursor-pointer aspect-square bg-blush-50" onclick="openLightbox('${photo.id}')">
-                        <img src="${photo.url}" alt="${escapeHtml(photo.name)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        
-                        <span class="absolute top-3 left-3 bg-white/95 backdrop-blur text-blush-500 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-blush-200 shadow-sm">
+                        <img src="${photo.url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <span class="absolute top-3 left-3 bg-white/95 text-blush-500 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-blush-200">
                             ${photo.category || 'Tetamu'}
                         </span>
-
-                        <div class="absolute inset-0 bg-rosewood/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                            <span class="bg-white text-rosewood text-xs font-bold px-3 py-1.5 rounded-full shadow-md flex items-center gap-1">
-                                <i class="fa-solid fa-expand text-blush-400"></i> Lihat
-                            </span>
-                        </div>
                     </div>
-                    
                     <div class="p-4 flex-1 flex flex-col justify-between">
                         <div>
                             <div class="flex justify-between items-start mb-1">
@@ -881,14 +706,12 @@
                             </div>
                             <p class="text-xs text-dusty-500 line-clamp-2 italic mb-3">"${escapeHtml(photo.message)}"</p>
                         </div>
-
                         <div class="flex items-center justify-between border-t border-blush-100 pt-3 mt-auto text-xs">
                             <button onclick="likePhoto('${photo.id}')" class="flex items-center gap-1.5 text-dusty-500 hover:text-rose-500 transition">
                                 <i class="fa-solid fa-heart ${photo.likes > 0 ? 'text-rose-500' : 'text-gray-300'}"></i>
                                 <span class="font-medium">${photo.likes}</span>
                             </button>
-                            
-                            <a href="${photo.url}" download="Aiman-Erna-Wedding-${photo.id}.jpg" onclick="event.stopPropagation()" class="text-blush-500 hover:text-blush-600 font-semibold flex items-center gap-1 bg-blush-50 hover:bg-blush-100 px-3 py-1 rounded-lg border border-blush-200 transition text-[11px]">
+                            <a href="${photo.url}" download class="text-blush-500 hover:text-blush-600 font-semibold flex items-center gap-1 bg-blush-50 hover:bg-blush-100 px-3 py-1 rounded-lg border border-blush-200 transition text-[11px]">
                                 <i class="fa-solid fa-download"></i> Simpan
                             </a>
                         </div>
@@ -899,34 +722,29 @@
 
         function renderWishes() {
             const wishesList = document.getElementById('wishesList');
-            if (wishes.length === 0) {
-                wishesList.innerHTML = `<p class="text-center text-xs text-dusty-400 py-4">Belum ada ucapan. Kirimkan doa anda sekarang!</p>`;
-                return;
-            }
-
-            wishesList.innerHTML = wishes.map(wish => `
-                <div class="bg-cream p-3.5 rounded-xl border border-blush-200 shadow-sm">
-                    <div class="flex items-center justify-between mb-1">
-                        <div class="flex items-center gap-2">
-                            <span class="w-6 h-6 rounded-full bg-blush-100 text-blush-500 border border-blush-200 flex items-center justify-center text-[10px] font-bold">
-                                ${wish.name.charAt(0).toUpperCase()}
-                            </span>
-                            <h4 class="font-bold text-xs text-rosewood">${escapeHtml(wish.name)}</h4>
+            wishesList.innerHTML = wishes.length === 0 
+                ? `<p class="text-center text-xs text-dusty-400 py-4">Belum ada ucapan.</p>` 
+                : wishes.map(wish => `
+                    <div class="bg-cream p-3.5 rounded-xl border border-blush-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-1">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-full bg-blush-100 text-blush-500 border border-blush-200 flex items-center justify-center text-[10px] font-bold">
+                                    ${wish.name.charAt(0).toUpperCase()}
+                                </span>
+                                <h4 class="font-bold text-xs text-rosewood">${escapeHtml(wish.name)}</h4>
+                            </div>
+                            <span class="text-[10px] bg-white border border-blush-200 text-dusty-500 px-2 py-0.5 rounded-full font-medium">${escapeHtml(wish.count)}</span>
                         </div>
-                        ${wish.count ? `<span class="text-[10px] bg-white border border-blush-200 text-dusty-500 px-2 py-0.5 rounded-full font-medium">${escapeHtml(wish.count)}</span>` : ''}
+                        <p class="text-xs text-dusty-500 pl-8">${escapeHtml(wish.text)}</p>
                     </div>
-                    <p class="text-xs text-dusty-500 pl-8">${escapeHtml(wish.text)}</p>
-                </div>
-            `).join('');
+                `).join('');
         }
 
         function filterPhotos(category) {
             currentFilter = category;
-            const btns = document.querySelectorAll('.filter-btn');
-            btns.forEach(btn => {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.className = 'filter-btn bg-white text-dusty-500 border border-blush-200 hover:text-blush-500 px-4 py-2 rounded-full font-medium';
             });
-
             event.target.className = 'filter-btn bg-blush-400 text-white px-4 py-2 rounded-full font-bold shadow-sm';
             renderGallery();
         }
@@ -934,10 +752,9 @@
         function likePhoto(id) {
             const photo = photos.find(p => p.id === id);
             if (photo) {
-                photo.likes += 1;
+                photo.likes++;
                 savePhotos();
                 renderGallery();
-
                 const lightbox = document.getElementById('lightbox');
                 if (!lightbox.classList.contains('hidden')) {
                     document.getElementById('lightboxLikesCount').innerText = photo.likes;
@@ -948,41 +765,27 @@
         function openLightbox(id) {
             const photo = photos.find(p => p.id === id);
             if (!photo) return;
-
             document.getElementById('lightboxImg').src = photo.url;
             document.getElementById('lightboxCategory').innerText = photo.category || 'Tetamu';
             document.getElementById('lightboxName').innerText = photo.name;
             document.getElementById('lightboxMsg').innerText = `"${photo.message}"`;
             document.getElementById('lightboxLikesCount').innerText = photo.likes;
-            
-            const downloadBtn = document.getElementById('lightboxDownloadBtn');
-            downloadBtn.href = photo.url;
-            downloadBtn.download = `Aiman-Erna-Wedding-${photo.id}.jpg`;
-
-            const likeBtn = document.getElementById('lightboxLikeBtn');
-            likeBtn.onclick = () => likePhoto(photo.id);
-
+            document.getElementById('lightboxDownloadBtn').href = photo.url;
+            document.getElementById('lightboxLikeBtn').onclick = () => likePhoto(photo.id);
             document.getElementById('lightbox').classList.remove('hidden');
         }
 
-        function closeLightbox() {
-            document.getElementById('lightbox').classList.add('hidden');
-        }
+        function closeLightbox() { document.getElementById('lightbox').classList.add('hidden'); }
 
         function showToast(message) {
             const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toastMsg');
-
-            toastMsg.innerText = message;
+            document.getElementById('toastMsg').innerText = message;
             toast.classList.remove('translate-y-20', 'opacity-0');
-            
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
         }
 
         function escapeHtml(str) {
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+            return str ? str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;") : '';
         }
     </script>
 </body>
