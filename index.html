@@ -813,5 +813,77 @@
             return str ? str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;") : '';
         }
     </script>
+    // Konfigurasi Firebase anda (pastikan kekal dengan kunci anda sendiri)
+    // firebase.initializeApp(firebaseConfig);
+
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    const uploadForm = document.getElementById('uploadForm');
+    const fileInput = document.getElementById('fileInput');
+    const guestName = document.getElementById('guestName');
+    const guestMessage = document.getElementById('guestMessage');
+    const galleryContainer = document.getElementById('galleryContainer');
+
+    // 1. Proses Hantar/Muat Naik ke Firebase
+    if (uploadForm) {
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const file = fileInput.files[0];
+            if (!file) return alert('Sila pilih gambar terlebih dahulu!');
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Sedang Muat Naik...";
+
+            try {
+                // Simpan gambar ke Firebase Storage
+                const storageRef = storage.ref('wedding-gallery/' + Date.now() + '_' + file.name);
+                const snapshot = await storageRef.put(file);
+                const downloadURL = await snapshot.ref.getDownloadURL();
+
+                // Simpan info ke Firestore supaya semua tetamu nampak
+                await db.collection('guest_gallery').add({
+                    imageUrl: downloadURL,
+                    name: guestName.value,
+                    message: guestMessage.value || '',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                alert('Berjaya muat naik!');
+                uploadForm.reset();
+                location.reload(); 
+            } catch (error) {
+                console.error("Ralat: ", error);
+                alert('Gagal muat naik gambar. Sila cuba lagi.');
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Muat Naik Ke Galeri Awam";
+            }
+        });
+    }
+
+    // 2. Automatik Papar Gambar Untuk Semua Orang (Real-time)
+    if (galleryContainer) {
+        db.collection('guest_gallery').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
+            galleryContainer.innerHTML = '';
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                galleryContainer.innerHTML += `
+                    <div class="bg-white p-3 rounded-2xl shadow-sm border border-blush-100">
+                        <img src="${data.imageUrl}" alt="Gambar Tetamu" class="w-full h-48 object-cover rounded-xl mb-2">
+                        <p class="font-bold text-rosewood text-sm">${escapeHtml(data.name)}</p>
+                        <p class="text-dusty-500 text-xs">${escapeHtml(data.message || '')}</p>
+                    </div>
+                `;
+            });
+        });
+    }
+
+    // Fungsi keselamatan kecil untuk teks
+    function escapeHtml(text) {
+        if (!text) return '';
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+    </script>
 </body>
 </html>
