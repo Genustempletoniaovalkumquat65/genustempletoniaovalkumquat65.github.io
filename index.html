@@ -57,6 +57,10 @@
     <!-- YouTube Iframe API -->
     <script src="https://www.youtube.com/iframe_api"></script>
 
+    <!-- Firebase App (Compat) & Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -298,7 +302,7 @@
                     <textarea id="rsvpWishText" rows="3" required placeholder="Tuliskan ucapan atau doa ikhlas anda..." class="w-full px-4 py-2.5 rounded-xl bg-white border border-blush-200 text-rosewood text-sm outline-none resize-none"></textarea>
                 </div>
 
-                <button type="submit" class="w-full bg-blush-400 hover:bg-blush-500 text-white font-bold py-3.5 px-6 rounded-xl transition shadow-sm flex items-center justify-center gap-2 text-xs uppercase tracking-wider">
+                <button type="submit" id="wishSubmitBtn" class="w-full bg-blush-400 hover:bg-blush-500 text-white font-bold py-3.5 px-6 rounded-xl transition shadow-sm flex items-center justify-center gap-2 text-xs uppercase tracking-wider">
                     <i class="fa-solid fa-paper-plane"></i> Hantar Ucapan
                 </button>
             </form>
@@ -434,6 +438,22 @@
 
     <!-- Main Logic Script -->
     <script>
+        /* --- FIREBASE CONFIGURATION --- */
+        const firebaseConfig = {
+            apiKey: "ISI_API_KEY_ANDA",
+            authDomain: "ISI_AUTH_DOMAIN_ANDA",
+            projectId: "ISI_PROJECT_ID_ANDA",
+            storageBucket: "ISI_STORAGE_BUCKET_ANDA",
+            messagingSenderId: "ISI_MESSAGING_SENDER_ID_ANDA",
+            appId: "ISI_APP_ID_ANDA"
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+
         /* --- Falling Rose Petals Canvas Animation --- */
         function initPetalAnimation() {
             const canvas = document.getElementById('petalCanvas');
@@ -515,32 +535,6 @@
         let ytPlayerReady = false;
         let useBackupAudio = false;
 
-        const SAMPLE_PHOTOS = [
-            {
-                id: 'ae-1',
-                url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
-                name: 'Keluarga Uncle Rahman',
-                category: 'Majlis Nikah',
-                message: 'Selamat Pengantin Baru Aiman & Erna! Moga berbahagia hingga ke Jannah ❤️',
-                likes: 18,
-                timestamp: '15 minit lalu'
-            },
-            {
-                id: 'ae-2',
-                url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
-                name: 'Geng Universiti Aiman',
-                category: 'Bersama Pengantin',
-                message: 'Tahniah bro Aiman & Erna! Pelamin tema soft pink & gold sangat cantik!',
-                likes: 24,
-                timestamp: '45 minit lalu'
-            }
-        ];
-
-        const SAMPLE_WISHES = [
-            { name: 'Dato\' Hj. Azman & Datin', count: '2 Orang', text: 'Barakallahulakuma wa baraka alaika wa jamaa bainakuma fii khair buat Aiman & Erna.' },
-            { name: 'Farah & Husband', count: '2 Orang', text: 'Tahniah Erna sayang! So happy for both of you!' }
-        ];
-
         function onYouTubeIframeAPIReady() {
             try {
                 ytPlayer = new YT.Player('ytAudioPlayer', {
@@ -581,20 +575,35 @@
 
         window.onload = function() {
             initPetalAnimation();
-            loadData();
+            initRealtimeSync();
             initCountdown();
             setupEventListeners();
-            renderGallery();
-            renderWishes();
         };
 
-        function loadData() {
-            photos = JSON.parse(localStorage.getItem('ae_wedding_photos')) || SAMPLE_PHOTOS;
-            wishes = JSON.parse(localStorage.getItem('ae_wedding_wishes')) || SAMPLE_WISHES;
-        }
+        // Realtime Sync with Firebase Firestore
+        function initRealtimeSync() {
+            // Listen to Photos Collection
+            db.collection("wedding_photos").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+                photos = [];
+                snapshot.forEach((doc) => {
+                    photos.push({ id: doc.id, ...doc.data() });
+                });
+                renderGallery();
+            }, (error) => {
+                console.error("Error getting photos: ", error);
+            });
 
-        function savePhotos() { localStorage.setItem('ae_wedding_photos', JSON.stringify(photos)); }
-        function saveWishes() { localStorage.setItem('ae_wedding_wishes', JSON.stringify(wishes)); }
+            // Listen to Wishes Collection
+            db.collection("wedding_wishes").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+                wishes = [];
+                snapshot.forEach((doc) => {
+                    wishes.push({ id: doc.id, ...doc.data() });
+                });
+                renderWishes();
+            }, (error) => {
+                console.error("Error getting wishes: ", error);
+            });
+        }
 
         function initCountdown() {
             const weddingDate = new Date('January 2, 2027 09:00:00').getTime();
@@ -664,40 +673,70 @@
                 showToast('Sila pilih sekurang-kurangnya satu gambar!');
                 return;
             }
+
             const guestName = document.getElementById('guestName').value.trim();
             const guestCategory = document.getElementById('guestCategory').value;
             const guestMessage = document.getElementById('guestMessage').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>Sedang Dimuat Naik...</span>`;
 
-            selectedFilesData.forEach(fileUrl => {
-                photos.unshift({
-                    id: 'ae-photo-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
-                    url: fileUrl, name: guestName, category: guestCategory,
+            let promises = selectedFilesData.map(fileUrl => {
+                return db.collection("wedding_photos").add({
+                    url: fileUrl,
+                    name: guestName,
+                    category: guestCategory,
                     message: guestMessage || 'Momen indah bersama Aiman & Erna!',
-                    likes: 0, timestamp: 'Baru sahaja'
+                    likes: 0,
+                    timestamp: 'Baru sahaja',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
             });
 
-            savePhotos();
-            renderGallery();
-            document.getElementById('uploadForm').reset();
-            document.getElementById('previewContainer').classList.add('hidden');
-            document.getElementById('uploadPrompt').classList.remove('hidden');
-            selectedFilesData = [];
-            showToast('Gambar berjaya dimuat naik!');
-            document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
+            Promise.all(promises).then(() => {
+                document.getElementById('uploadForm').reset();
+                document.getElementById('previewContainer').classList.add('hidden');
+                document.getElementById('uploadPrompt').classList.remove('hidden');
+                selectedFilesData = [];
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i><span>Muat Naik Ke Galeri Awam</span>`;
+                showToast('Gambar berjaya dimuat naik & sync!');
+                document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
+            }).catch(error => {
+                console.error("Error adding photos: ", error);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i><span>Muat Naik Ke Galeri Awam</span>`;
+                showToast('Gagal memuat naik gambar.');
+            });
         }
 
         function handleRsvpSubmit(e) {
             e.preventDefault();
-            wishes.unshift({
-                name: document.getElementById('rsvpName').value.trim(),
-                count: document.getElementById('rsvpCount').value,
-                text: document.getElementById('rsvpWishText').value.trim()
+            const name = document.getElementById('rsvpName').value.trim();
+            const count = document.getElementById('rsvpCount').value;
+            const text = document.getElementById('rsvpWishText').value.trim();
+            const wishSubmitBtn = document.getElementById('wishSubmitBtn');
+
+            wishSubmitBtn.disabled = true;
+            wishSubmitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Hantar Ucapan...`;
+
+            db.collection("wedding_wishes").add({
+                name: name,
+                count: count,
+                text: text,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                document.getElementById('rsvpWishForm').reset();
+                wishSubmitBtn.disabled = false;
+                wishSubmitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Hantar Ucapan`;
+                showToast('Terima kasih! Ucapan anda telah dihantar.');
+            }).catch(error => {
+                console.error("Error adding wish: ", error);
+                wishSubmitBtn.disabled = false;
+                wishSubmitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Hantar Ucapan`;
+                showToast('Gagal menghantar ucapan.');
             });
-            saveWishes();
-            renderWishes();
-            document.getElementById('rsvpWishForm').reset();
-            showToast('Terima kasih! Ucapan anda telah dihantar.');
         }
 
         function renderGallery() {
@@ -724,14 +763,14 @@
                         <div>
                             <div class="flex justify-between items-start mb-1">
                                 <h3 class="font-bold text-rosewood text-sm">${escapeHtml(photo.name)}</h3>
-                                <span class="text-[10px] text-dusty-400">${photo.timestamp}</span>
+                                <span class="text-[10px] text-dusty-400">${photo.timestamp || 'Baru sahaja'}</span>
                             </div>
                             <p class="text-xs text-dusty-500 line-clamp-2 italic mb-3">"${escapeHtml(photo.message)}"</p>
                         </div>
                         <div class="flex items-center justify-between border-t border-blush-100 pt-3 mt-auto text-xs">
-                            <button onclick="likePhoto('${photo.id}')" class="flex items-center gap-1.5 text-dusty-500 hover:text-rose-500 transition">
-                                <i class="fa-solid fa-heart ${photo.likes > 0 ? 'text-rose-500' : 'text-gray-300'}"></i>
-                                <span class="font-medium">${photo.likes}</span>
+                            <button onclick="likePhoto('${photo.id}', ${photo.likes || 0})" class="flex items-center gap-1.5 text-dusty-500 hover:text-rose-500 transition">
+                                <i class="fa-solid fa-heart ${(photo.likes || 0) > 0 ? 'text-rose-500' : 'text-gray-300'}"></i>
+                                <span class="font-medium">${photo.likes || 0}</span>
                             </button>
                             <a href="${photo.url}" download class="text-blush-500 hover:text-blush-600 font-semibold flex items-center gap-1 bg-blush-50 hover:bg-blush-100 px-3 py-1 rounded-lg border border-blush-200 transition text-[11px]">
                                 <i class="fa-solid fa-download"></i> Simpan
@@ -751,7 +790,7 @@
                         <div class="flex items-center justify-between mb-1">
                             <div class="flex items-center gap-2">
                                 <span class="w-6 h-6 rounded-full bg-blush-100 text-blush-500 border border-blush-200 flex items-center justify-center text-[10px] font-bold">
-                                    ${wish.name.charAt(0).toUpperCase()}
+                                    ${wish.name ? wish.name.charAt(0).toUpperCase() : 'T'}
                                 </span>
                                 <h4 class="font-bold text-xs text-rosewood">${escapeHtml(wish.name)}</h4>
                             </div>
@@ -771,17 +810,18 @@
             renderGallery();
         }
 
-        function likePhoto(id) {
-            const photo = photos.find(p => p.id === id);
-            if (photo) {
-                photo.likes++;
-                savePhotos();
-                renderGallery();
+        function likePhoto(id, currentLikes) {
+            const newLikes = (currentLikes || 0) + 1;
+            db.collection("wedding_photos").doc(id).update({
+                likes: newLikes
+            }).then(() => {
                 const lightbox = document.getElementById('lightbox');
                 if (!lightbox.classList.contains('hidden')) {
-                    document.getElementById('lightboxLikesCount').innerText = photo.likes;
+                    document.getElementById('lightboxLikesCount').innerText = newLikes;
                 }
-            }
+            }).catch(error => {
+                console.error("Error updating likes: ", error);
+            });
         }
 
         function openLightbox(id) {
@@ -791,9 +831,9 @@
             document.getElementById('lightboxCategory').innerText = photo.category || 'Tetamu';
             document.getElementById('lightboxName').innerText = photo.name;
             document.getElementById('lightboxMsg').innerText = `"${photo.message}"`;
-            document.getElementById('lightboxLikesCount').innerText = photo.likes;
+            document.getElementById('lightboxLikesCount').innerText = photo.likes || 0;
             document.getElementById('lightboxDownloadBtn').href = photo.url;
-            document.getElementById('lightboxLikeBtn').onclick = () => likePhoto(photo.id);
+            document.getElementById('lightboxLikeBtn').onclick = () => likePhoto(photo.id, photo.likes || 0);
             document.getElementById('lightbox').classList.remove('hidden');
         }
 
