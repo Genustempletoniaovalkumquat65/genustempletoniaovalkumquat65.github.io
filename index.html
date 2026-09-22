@@ -6,67 +6,6 @@
 </head>
 <body>
 
-  <input type="file" id="imageInput" accept="image/*" />
-  <input type="text" id="textInput" placeholder="Enter your message..." />
-  <button id="uploadBtn">Send to Firebase</button>
-
-  <script type="module">
-    // Import the SDKs you need from the CDN
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-storage.js";
-
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY", // Get this from your Firebase Project Settings
-      authDomain: "aimanernaweddings.firebaseapp.com",
-      projectId: "aimanernaweddings",
-      storageBucket: "aimanernaweddings.firebasestorage.app",
-      messagingSenderId: "903105897317",
-      appId: "YOUR_APP_ID" // Get this from your Firebase Project Settings
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
-
-    const uploadBtn = document.getElementById('uploadBtn');
-
-    uploadBtn.addEventListener('click', async () => {
-      const file = document.getElementById('imageInput').files[0];
-      const textVal = document.getElementById('textInput').value;
-
-      if (!file && !textVal) {
-        alert("Please add an image or text first!");
-        return;
-      }
-
-      try {
-        let imageUrl = "";
-
-        // 1. If there's a picture, upload it to Cloud Storage first
-        if (file) {
-          const imageRef = ref(storage, `wedding_images/${Date.now()}_${file.name}`);
-          const uploadResult = await uploadBytes(imageRef, file);
-          imageUrl = await getDownloadURL(uploadResult.ref);
-        }
-
-        // 2. Save the text and the picture URL to Firestore
-        await addDoc(collection(db, "guestbook"), {
-          text: textVal,
-          imageUrl: imageUrl,
-          createdAt: new Date()
-        });
-
-        alert("Successfully saved to Firebase!");
-      } catch (error) {
-        console.error("Error uploading: ", error);
-        alert("Failed to save. Check your browser console and security rules.");
-      }
-    });
-  </script>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Walimatulurus Aiman & Erna | 02.01.2027</title>
 
