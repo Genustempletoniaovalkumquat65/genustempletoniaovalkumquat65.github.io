@@ -323,9 +323,10 @@
                 <p class="text-dusty-400 text-xs md:text-sm mt-1">Kongsi moment & foto menarik yang anda ambil sepanjang majlis ini berlangsung.</p>
             </div>
 
-            <form id="uploadForm" class="space-y-6">
+            <!-- LANGKAH 2: Borang HTML Yang Telah Disepadukan Dengan Fungsi Telegram -->
+            <form id="uploadForm" class="space-y-6" onsubmit="uploadToTelegram(event)">
                 <div id="dropZone" class="border-2 border-dashed border-blush-300 rounded-2xl p-8 text-center bg-blush-50/50 hover:bg-blush-50 transition cursor-pointer relative group">
-                    <input type="file" id="fileInput" accept="image/*" class="hidden" multiple>
+                    <input type="file" id="fileInput" accept="image/*" class="hidden" multiple required>
                     
                     <div id="uploadPrompt" class="space-y-3">
                         <div class="w-14 h-14 bg-white text-blush-400 rounded-full border border-blush-200 flex items-center justify-center mx-auto text-xl shadow-sm group-hover:scale-105 transition">
@@ -639,7 +640,6 @@
             const fileInput = document.getElementById('fileInput');
             dropZone.addEventListener('click', () => fileInput.click());
             fileInput.addEventListener('change', handleFileSelect);
-            document.getElementById('uploadForm').addEventListener('submit', handlePhotoSubmit);
             document.getElementById('rsvpWishForm').addEventListener('submit', handleRsvpSubmit);
         }
 
@@ -657,7 +657,7 @@
             files.forEach(file => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    selectedFilesData.push(e.target.result);
+                    selectedFilesData.push({ fileObj: file, dataUrl: e.target.result });
                     const imgWrapper = document.createElement('div');
                     imgWrapper.className = 'relative aspect-square rounded-xl overflow-hidden border border-blush-200 shadow-sm';
                     imgWrapper.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
@@ -667,47 +667,87 @@
             });
         }
 
-        function handlePhotoSubmit(e) {
-            e.preventDefault();
-            if (selectedFilesData.length === 0) {
+        /* --- LANGKAH 3: Kod JavaScript Integrasi Telegram Bot --- */
+        async function uploadToTelegram(event) {
+            event.preventDefault();
+            
+            // Gantikan dengan Token Bot dan Chat ID Telegram anda yang sebenar
+            const token = "WeddingAimanErnaBot"; 
+            const chatId = "5965855949";
+            
+            const guestName = document.getElementById('guestName').value.trim();
+            const guestCategory = document.getElementById('guestCategory').value;
+            const guestMessage = document.getElementById('guestMessage').value.trim();
+            const fileInput = document.getElementById('fileInput');
+            const files = fileInput.files;
+
+            if (files.length === 0) {
                 showToast('Sila pilih sekurang-kurangnya satu gambar!');
                 return;
             }
 
-            const guestName = document.getElementById('guestName').value.trim();
-            const guestCategory = document.getElementById('guestCategory').value;
-            const guestMessage = document.getElementById('guestMessage').value.trim();
             const submitBtn = document.getElementById('submitBtn');
-            
             submitBtn.disabled = true;
-            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>Sedang Dimuat Naik...</span>`;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>Sedang Hantar ke Telegram...</span>`;
 
-            let promises = selectedFilesData.map(fileUrl => {
-                return db.collection("wedding_photos").add({
-                    url: fileUrl,
-                    name: guestName,
-                    category: guestCategory,
-                    message: guestMessage || 'Momen indah bersama Aiman & Erna!',
-                    likes: 0,
-                    timestamp: 'Baru sahaja',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            let uploadPromises = Array.from(files).map(file => {
+                const formData = new FormData();
+                formData.append('chat_id', chatId);
+                formData.append('photo', file);
+                formData.append('caption', `Nama: ${guestName}\nKategori: ${guestCategory}\nUcapan: ${guestMessage || 'Momen indah bersama Aiman & Erna!'}`);
+
+                return fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.ok) {
+                        // Ambil saiz foto terbesar dari respons Telegram
+                        const photosArray = result.result.photo;
+                        const bestPhoto = photosArray[photosArray.length - 1];
+                        const fileId = bestPhoto.file_id;
+
+                        // Dapatkan pautan fail sebenar daripada Telegram menggunakan getFile
+                        return fetch(`https://api.telegram.org/bot${token}/getFile?file_id=${fileId}`)
+                            .then(res => res.json())
+                            .then(fileResult => {
+                                if (fileResult.ok) {
+                                    const filePath = fileResult.result.file_path;
+                                    const downloadURL = `https://api.telegram.org/file/bot${token}/${filePath}`;
+
+                                    // Simpan pautan URL Telegram ke Firestore supaya terpapar di galeri web
+                                    return db.collection("wedding_photos").add({
+                                        url: downloadURL,
+                                        name: guestName,
+                                        category: guestCategory,
+                                        message: guestMessage || 'Momen indah bersama Aiman & Erna!',
+                                        likes: 0,
+                                        timestamp: 'Baru sahaja',
+                                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                                    });
+                                }
+                            });
+                    } else {
+                        throw new Error('Gagal hantar ke Telegram API');
+                    }
                 });
             });
 
-            Promise.all(promises).then(() => {
+            Promise.all(uploadPromises).then(() => {
                 document.getElementById('uploadForm').reset();
                 document.getElementById('previewContainer').classList.add('hidden');
                 document.getElementById('uploadPrompt').classList.remove('hidden');
                 selectedFilesData = [];
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i><span>Muat Naik Ke Galeri Awam</span>`;
-                showToast('Gambar berjaya dimuat naik & sync!');
+                showToast('Gambar berjaya dimuat naik!');
                 document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
             }).catch(error => {
-                console.error("Error adding photos: ", error);
+                console.error("Error uploading: ", error);
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i><span>Muat Naik Ke Galeri Awam</span>`;
-                showToast('Gagal memuat naik gambar.');
+                showToast('Gagal memuat naik gambar. Sila semak Token Telegram anda.');
             });
         }
 
@@ -834,6 +874,7 @@
             document.getElementById('lightboxLikesCount').innerText = photo.likes || 0;
             document.getElementById('lightboxDownloadBtn').href = photo.url;
             document.getElementById('lightboxLikeBtn').onclick = () => likePhoto(photo.id, photo.likes || 0);
+            document.getElementById('lightbox').classList.add('hidden'); // placeholder bug fix
             document.getElementById('lightbox').classList.remove('hidden');
         }
 
